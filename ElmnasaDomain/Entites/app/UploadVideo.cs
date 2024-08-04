@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElmnasaDomain.Entites.app
 {
-    public class UploadVideo
+    public class UploadVideo : BaseEntity
     {
         public UploadVideo()
         {

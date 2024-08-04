@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ElmnasaDomain.Entites.app
 {
-    public class Grades : BaseEntity
+    public class BaseEntity
     {
-        public string Name { get; set; }
-        public string Student_id { get; set; }
+        public int Id { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

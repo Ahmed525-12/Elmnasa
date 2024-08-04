@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElmnasaDomain.Entites.app
 {
-    public class SubscribeSubject
+    public class SubscribeSubject : BaseEntity
     {
         public SubscribeSubject()
         {

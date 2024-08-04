@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElmnasaDomain.Entites.app
 {
-    public class Quiz
+    public class Quiz : BaseEntity
     {
         public Quiz()
         {

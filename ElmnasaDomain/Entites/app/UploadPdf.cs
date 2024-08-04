@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ElmnasaDomain.Entites.app
 {
-    public class UploadPdf
+    public class UploadPdf : BaseEntity
     {
         public UploadPdf()
         {
