@@ -1,8 +1,10 @@
+using ElmnasaDomain.DTOs.EmailDTO;
 using ElmnasaDomain.Entites.identity;
 using ElmnasaInfrastructure.AppContext;
 using ElmnasaInfrastructure.IdentityContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ElmnasaApp.ServicesExtension;
 
 namespace Elmnasa
 {
@@ -52,7 +54,9 @@ namespace Elmnasa
          .AddEntityFrameworkStores<AccountContext>()
          .AddSignInManager<SignInManager<Admin>>()
          .AddDefaultTokenProviders();
-
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+            builder.Services.AddAplicationServices();
+            builder.Services.AddIdentityServices(builder.Configuration);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
