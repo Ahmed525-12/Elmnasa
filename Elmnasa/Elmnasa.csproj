@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ElmnasaApp\ElmnasaApp.csproj" />
     <ProjectReference Include="..\ElmnasaDomain\ElmnasaDomain.csproj" />
     <ProjectReference Include="..\ElmnasaInfrastructure\ElmnasaInfrastructure.csproj" />
