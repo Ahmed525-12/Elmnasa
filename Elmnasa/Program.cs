@@ -32,28 +32,30 @@ namespace Elmnasa
 
             builder.Services.AddDefaultIdentity<Account>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddRoles<IdentityRole>() // Add roles
+            .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<AccountContext>()
-            .AddDefaultTokenProviders();
+            ;
 
             builder.Services.AddIdentityCore<Student>(options =>
-            {
-            }).AddRoles<IdentityRole>() // Add roles
+             options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>() // Add roles
+            .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<AccountContext>()
                 .AddSignInManager<SignInManager<Student>>()
-                .AddDefaultTokenProviders();
+                ;
             builder.Services.AddIdentityCore<Teacher>(options =>
-            {
-            }).AddRoles<IdentityRole>() // Add roles
+             options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>() // Add roles
+            .AddDefaultTokenProviders()
           .AddEntityFrameworkStores<AccountContext>()
           .AddSignInManager<SignInManager<Teacher>>()
-          .AddDefaultTokenProviders();
+          ;
 
             builder.Services.AddIdentityCore<Admin>(options =>
-            {
-            }).AddRoles<IdentityRole>() // Add roles
+             options.SignIn.RequireConfirmedAccount = false
+            ).AddRoles<IdentityRole>() // Add roles
+            .AddDefaultTokenProviders()
          .AddEntityFrameworkStores<AccountContext>()
          .AddSignInManager<SignInManager<Admin>>()
-         .AddDefaultTokenProviders();
+         ;
             builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             builder.Services.AddAplicationServices();
             builder.Services.AddIdentityServices(builder.Configuration);

@@ -3,6 +3,7 @@ using ElmnasaApp.ErrorHandler;
 using ElmnasaApp.JWTToken.Intrefaces;
 using ElmnasaApp.Wrapper.WorkWrapper;
 using ElmnasaDomain.DTOs.AdminDtos;
+using ElmnasaDomain.DTOs.EmailDTO;
 using ElmnasaDomain.DTOs.StudentDTOs;
 using ElmnasaDomain.DTOs.TeacherDtos;
 using ElmnasaDomain.Entites.identity;
@@ -360,6 +361,136 @@ namespace Elmnasa.Controllers
             catch (Exception ex)
             {
                 return Ok(Result<AdminDto>.Fail(ex.Message));
+            }
+        }
+
+        [HttpPost("SendEmailStudent")]
+        public async Task<IActionResult> SendEmailStudent(ForgetPasswordDto emailinput)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(emailinput.Email))
+                {
+                    return BadRequest("Email input cannot be null or empty.");
+                }
+
+                var user = await _studentManager.FindByEmailAsync(emailinput.Email);
+                if (user != null)
+                {
+                    var token = await _studentManager.GeneratePasswordResetTokenAsync(user);
+                    var resetPasswordLink = Url.Action("ResetPassword", "Account", new { email = user.Email, Token = token }, Request.Scheme);
+                    var email = new EmailDTO()
+                    {
+                        Subject = "Reset Password",
+                        To = emailinput.Email,
+                        Body = resetPasswordLink,
+                    };
+
+                    _emailSettings.SendEmail(email);
+                    var emailsucess = new RecieveEmail()
+                    {
+                        token = token,
+                        email = emailinput.Email,
+                    }
+                        ;
+                    return Ok(Result<RecieveEmail>.Success(emailsucess, "Success"));
+                }
+                else
+                {
+                    return Ok(Result.Fail("Email does not exist."));
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(Result.Fail(ex.Message));
+            }
+        }
+
+        [HttpPost("ResetPasswordStudent")]
+        public async Task<IActionResult> ResetPasswordStudent(ResetPasswordDto model)
+        {
+            try
+            {
+                var user = await _studentManager.FindByEmailAsync(model.email);
+                var result = await _studentManager.ResetPasswordAsync(user, model.token, model.Password);
+
+                if (result.Succeeded)
+                {
+                    return Ok(Result.Success("Success"));
+                }
+                else
+                {
+                    return Ok(Result.Fail("fail to reset password"));
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(Result.Fail(ex.Message));
+            }
+        }
+
+        [HttpPost("SendEmailTeacher")]
+        public async Task<IActionResult> SendEmailTeacher(ForgetPasswordDto emailinput)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(emailinput.Email))
+                {
+                    return BadRequest("Email input cannot be null or empty.");
+                }
+
+                var user = await _TeacherManager.FindByEmailAsync(emailinput.Email);
+                if (user != null)
+                {
+                    var token = await _TeacherManager.GeneratePasswordResetTokenAsync(user);
+                    var resetPasswordLink = Url.Action("ResetPassword", "Account", new { email = user.Email, Token = token }, Request.Scheme);
+                    var email = new EmailDTO()
+                    {
+                        Subject = "Reset Password",
+                        To = emailinput.Email,
+                        Body = resetPasswordLink,
+                    };
+
+                    _emailSettings.SendEmail(email);
+                    var emailsucess = new RecieveEmail()
+                    {
+                        token = token,
+                        email = emailinput.Email,
+                    }
+                        ;
+                    return Ok(Result<RecieveEmail>.Success(emailsucess, "Success"));
+                }
+                else
+                {
+                    return Ok(Result.Fail("Email does not exist."));
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(Result.Fail(ex.Message));
+            }
+        }
+
+        [HttpPost("ResetPasswordTeacher")]
+        public async Task<IActionResult> ResetPasswordTeacher(ResetPasswordDto model)
+        {
+            try
+            {
+                var user = await _TeacherManager.FindByEmailAsync(model.email);
+                var result = await _TeacherManager.ResetPasswordAsync(user, model.token, model.Password);
+
+                if (result.Succeeded)
+                {
+                    return Ok(Result.Success("Success"));
+                }
+                else
+                {
+                    return Ok(Result.Fail("fail to reset password"));
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(Result.Fail(ex.Message));
             }
         }
 
