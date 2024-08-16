@@ -3,8 +3,10 @@ using ElmnasaApp.Email.WorkEmail;
 using ElmnasaApp.JWTToken.Intrefaces;
 using ElmnasaApp.JWTToken.WorkToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -16,32 +18,32 @@ namespace ElmnasaApp.ServicesExtension
 {
     public static class IdentityServicesExtension
     {
-        public static IServiceCollection AddIdentityServices(this IServiceCollection Services, IConfiguration _configuration)
+        public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
-            Services.AddScoped<ITokenService, TokenService>();
-            Services.AddScoped<IEmailSettings, EmailSettings>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IEmailSettings, EmailSettings>();
 
-            // Register other managers similarly
-
-            Services.AddAuthentication(Option =>
+            services.AddAuthentication(options =>
             {
-                Option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                Option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                    .AddJwtBearer(option =>
-                    {
-                        option.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            ValidateIssuer = true,
-                            ValidIssuer = _configuration["JWT:Issuer"],
-                            ValidateAudience = true,
-                            ValidAudience = _configuration["JWT:Audience"],
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]))
-                        };
-                    });
-            return Services;
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["JWT:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = configuration["JWT:Audience"],
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
+                };
+            });
+
+            return services;
         }
     }
 }

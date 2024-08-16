@@ -21,7 +21,7 @@ namespace ElmnasaApp.JWTToken.WorkToken
             _configuration = configuration;
         }
 
-        public string CreateTokenAsync(Account user)
+        public string CreateToken(Account user)
         {
             // Claims
             var UserClaim = new List<Claim>()

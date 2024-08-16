@@ -24,39 +24,53 @@ namespace Elmnasa
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
             // Configure the database context for Identity
             builder.Services.AddDbContext<AccountContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("AppIdentityConnection")))
                ;
 
-            builder.Services.AddDefaultIdentity<Account>(options => options.SignIn.RequireConfirmedAccount = false)
+            builder.Services.AddDefaultIdentity<Account>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+            })
             .AddRoles<IdentityRole>() // Add roles
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<AccountContext>()
+
             ;
 
             builder.Services.AddIdentityCore<Student>(options =>
-             options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>() // Add roles
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+            }).AddRoles<IdentityRole>() // Add roles
             .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<AccountContext>()
                 .AddSignInManager<SignInManager<Student>>()
                 ;
             builder.Services.AddIdentityCore<Teacher>(options =>
-             options.SignIn.RequireConfirmedAccount = false).AddRoles<IdentityRole>() // Add roles
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+            }).AddRoles<IdentityRole>() // Add roles
             .AddDefaultTokenProviders()
           .AddEntityFrameworkStores<AccountContext>()
           .AddSignInManager<SignInManager<Teacher>>()
+
           ;
 
             builder.Services.AddIdentityCore<Admin>(options =>
-             options.SignIn.RequireConfirmedAccount = false
-            ).AddRoles<IdentityRole>() // Add roles
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+            }).AddRoles<IdentityRole>() // Add roles
             .AddDefaultTokenProviders()
          .AddEntityFrameworkStores<AccountContext>()
          .AddSignInManager<SignInManager<Admin>>()
          ;
-            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
             builder.Services.AddAplicationServices();
             builder.Services.AddIdentityServices(builder.Configuration);
             var app = builder.Build();

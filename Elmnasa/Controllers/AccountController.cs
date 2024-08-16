@@ -102,7 +102,7 @@ namespace Elmnasa.Controllers
                     DisplayName = registerDto.DisplayName,
                     Email = registerDto.Email,
                     Uid = registerDto.UId,
-                    Token = _tokenService.CreateTokenAsync(user)// Ensure the token creation is awaited
+                    Token = _tokenService.CreateToken(user)// Ensure the token creation is awaited
                 };
 
                 return Ok(Result<StudentDto>.Success(returnedUser, "Create successful"));
@@ -154,7 +154,7 @@ namespace Elmnasa.Controllers
                 {
                     DisplayName = registerDto.DisplayName,
                     Email = registerDto.Email,
-                    Token = _tokenService.CreateTokenAsync(user)// Ensure the token creation is awaited
+                    Token = _tokenService.CreateToken(user)// Ensure the token creation is awaited
                 };
 
                 return Ok(Result<TeacherDto>.Success(returnedUser, "Create successful"));
@@ -206,7 +206,7 @@ namespace Elmnasa.Controllers
                 {
                     DisplayName = registerDto.DisplayName,
                     Email = registerDto.Email,
-                    Token = _tokenService.CreateTokenAsync(user)// Ensure the token creation is awaited
+                    Token = _tokenService.CreateToken(user)// Ensure the token creation is awaited
                 };
 
                 return Ok(Result<AdminDto>.Success(returnedUser, "Create successful"));
@@ -255,7 +255,7 @@ namespace Elmnasa.Controllers
                 var returnedUser = new StudentDto
                 {
                     Email = logInDto.Email,
-                    Token = _tokenService.CreateTokenAsync(user)
+                    Token = _tokenService.CreateToken(user)
                 };
 
                 return Ok((Result<StudentDto>.Success(returnedUser, "Create successful")));
@@ -304,7 +304,7 @@ namespace Elmnasa.Controllers
                 var returnedUser = new TeacherDto
                 {
                     Email = logInDto.Email,
-                    Token = _tokenService.CreateTokenAsync(user)
+                    Token = _tokenService.CreateToken(user)
                 };
 
                 return Ok((Result<TeacherDto>.Success(returnedUser, "Create successful")));
@@ -353,7 +353,7 @@ namespace Elmnasa.Controllers
                 var returnedUser = new AdminDto
                 {
                     Email = logInDto.Email,
-                    Token = _tokenService.CreateTokenAsync(user)
+                    Token = _tokenService.CreateToken(user)
                 };
 
                 return Ok((Result<AdminDto>.Success(returnedUser, "Create successful")));
@@ -374,11 +374,12 @@ namespace Elmnasa.Controllers
                     return BadRequest("Email input cannot be null or empty.");
                 }
 
-                var user = await _studentManager.FindByEmailAsync(emailinput.Email);
+                Student user = await _studentManager.FindByEmailAsync(emailinput.Email);
                 if (user != null)
                 {
-                    var token = await _studentManager.GeneratePasswordResetTokenAsync(user);
-                    var resetPasswordLink = Url.Action("ResetPassword", "Account", new { email = user.Email, Token = token }, Request.Scheme);
+                    var token = _tokenService.CreateToken(user);
+                    var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/Account/ResetPassword?email={user.Email}&Token={token}";
+
                     var email = new EmailDTO()
                     {
                         Subject = "Reset Password",
@@ -442,8 +443,8 @@ namespace Elmnasa.Controllers
                 var user = await _TeacherManager.FindByEmailAsync(emailinput.Email);
                 if (user != null)
                 {
-                    var token = await _TeacherManager.GeneratePasswordResetTokenAsync(user);
-                    var resetPasswordLink = Url.Action("ResetPassword", "Account", new { email = user.Email, Token = token }, Request.Scheme);
+                    var token = _tokenService.CreateToken(user);
+                    var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/Account/ResetPassword?email={user.Email}&Token={token}";
                     var email = new EmailDTO()
                     {
                         Subject = "Reset Password",
