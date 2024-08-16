@@ -837,7 +837,7 @@ namespace Elmnasa.Controllers
                 }
                 else
                 {
-                    return Ok(Result<bool>.Success(false, "Student does not exist"));
+                    return Ok(Result.Fail("Student does not exist"));
                 }
             }
             catch (Exception ex)
@@ -876,7 +876,7 @@ namespace Elmnasa.Controllers
                 }
                 else
                 {
-                    return Ok(Result<bool>.Success(false, "Teacher does not exist"));
+                    return Ok(Result.Fail("Teacher does not exist"));
                 }
             }
             catch (Exception ex)
@@ -915,7 +915,7 @@ namespace Elmnasa.Controllers
                 }
                 else
                 {
-                    return Ok(Result<bool>.Success(false, "Admin does not exist"));
+                    return Ok(Result.Fail("Admin does not exist"));
                 }
             }
             catch (Exception ex)
