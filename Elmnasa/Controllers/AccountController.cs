@@ -80,7 +80,7 @@ namespace Elmnasa.Controllers
                 // Step 2: Check if a student with the provided email already exists
                 // This prevents duplicate registrations with the same email.
                 var studentExists = await CheckIfStudentExist(registerDto.Email);
-                if (studentExists == null)
+                if (studentExists != null)
                 {
                     return BadRequest(new ApiResponse(400, "This Email Is Already Exist"));
                 }
@@ -151,7 +151,7 @@ namespace Elmnasa.Controllers
 
                 // Step 2: Check if a teacher with the provided email already exists
                 var teacherExists = await CheckIfTeacherExist(registerDto.Email);
-                if (teacherExists == null)
+                if (teacherExists != null)
                 {
                     return BadRequest(new ApiResponse(400, "This Email Is Already Exist"));
                 }
@@ -218,7 +218,7 @@ namespace Elmnasa.Controllers
 
                 // Step 2: Check if an admin with the provided email already exists
                 var adminExists = await CheckIfAdminExist(registerDto.Email);
-                if (adminExists == null)
+                if (adminExists != null)
                 {
                     return BadRequest(new ApiResponse(400, "This Email Is Already Exist"));
                 }
