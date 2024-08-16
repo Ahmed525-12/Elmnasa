@@ -495,6 +495,52 @@ namespace Elmnasa.Controllers
             }
         }
 
+        [HttpPost("ChangePasswordStudent")]
+        public async Task<IActionResult> ChangePasswordStudent(ChangePasswordTeacherDTO model)
+        {
+            try
+            {
+                var user = await _studentManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return Ok(Result.Fail("user not found"));
+                }
+                var result = await _studentManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                if (!result.Succeeded)
+                {
+                    return Ok(Result.Fail("failed to change password"));
+                }
+                return Ok(Result.Success("Success change password"));
+            }
+            catch (Exception ex)
+            {
+                return Ok(Result.Fail(ex.Message));
+            }
+        }
+
+        [HttpPost("ChangePasswordTeacher")]
+        public async Task<IActionResult> ChangePasswordTeacher(ChangePasswordTeacherDTO model)
+        {
+            try
+            {
+                var user = await _TeacherManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return Ok(Result.Fail("user not found"));
+                }
+                var result = await _TeacherManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                if (!result.Succeeded)
+                {
+                    return Ok(Result.Fail("failed to change password"));
+                }
+                return Ok(Result.Success("Success change password"));
+            }
+            catch (Exception ex)
+            {
+                return Ok(Result.Fail(ex.Message));
+            }
+        }
+
         [HttpGet("IsStudentExist")]
         public async Task<ActionResult<bool>> CheckIfStudentExist(string Email)
         {
