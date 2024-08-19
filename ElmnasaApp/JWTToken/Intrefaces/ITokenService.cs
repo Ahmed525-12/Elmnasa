@@ -9,6 +9,6 @@ namespace ElmnasaApp.JWTToken.Intrefaces
 {
     public interface ITokenService
     {
-        public string CreateToken(Account user);
+        public Task<string> CreateToken(Account user);
     }
 }

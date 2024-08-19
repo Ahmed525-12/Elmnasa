@@ -1,4 +1,5 @@
-﻿using ElmnasaDomain.Entites.app;
+﻿using ElmnasaApp.Specf.Intrefaces;
+using ElmnasaDomain.Entites.app;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,7 @@ namespace ElmnasaApp.Genrics.Intrefaces
         void DeleteAsync(T item);
 
         void Update(T item);
+
+        Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> Spec);
     }
 }

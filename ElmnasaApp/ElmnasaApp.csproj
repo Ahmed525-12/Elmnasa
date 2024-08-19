@@ -18,4 +18,8 @@
     <ProjectReference Include="..\ElmnasaInfrastructure\ElmnasaInfrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Specf\AppSpecf\GradesSpecf\" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,6 @@
 ﻿using ElmnasaApp.Genrics.Intrefaces;
+using ElmnasaApp.Specf.Intrefaces;
+using ElmnasaApp.Specf.WorkSpecf;
 using ElmnasaDomain.Entites.app;
 using ElmnasaInfrastructure.AppContext;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +36,16 @@ namespace ElmnasaApp.Genrics.WorkGenrics
         public void Update(T item)
         {
             _dbContext.Update(item);
+        }
+
+        public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> Spec)
+        {
+            return await GenerateSpec(Spec).ToListAsync();
+        }
+
+        private IQueryable<T> GenerateSpec(ISpecifications<T> Spec)
+        {
+            return SpecificationEvalutor<T>.GetQuery(_dbContext.Set<T>(), Spec).Result;
         }
     }
 }

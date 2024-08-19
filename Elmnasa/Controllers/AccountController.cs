@@ -18,17 +18,15 @@ namespace Elmnasa.Controllers
     [ApiController]
     public class AccountController : BaseController
     {
-        private readonly ILogger<AccountController> _logger;
         private readonly IEmailSettings _emailSettings;
-        private readonly RoleManager<IdentityRole> _roleManager;
+
         private readonly UserManager<Student> _studentManager;
         private readonly SignInManager<Student> _signInManagerStudent;
         private readonly UserManager<Teacher> _TeacherManager;
         private readonly SignInManager<Teacher> _signInManagerTeacher;
         private readonly UserManager<Admin> _AdminManager;
         private readonly SignInManager<Admin> _signInManagerAdmin;
-        private readonly UserManager<Account> _accountManager;
-        private readonly SignInManager<Account> _signInManagerAccount;
+
         private readonly ITokenService _tokenService;
 
         public AccountController(UserManager<Student> studentManager,
@@ -37,12 +35,11 @@ namespace Elmnasa.Controllers
         SignInManager<Teacher> signInManagerTeacher,
          UserManager<Admin> AdminManager,
         SignInManager<Admin> signInManagerAdmin,
-        UserManager<Account> accountManager,
-        SignInManager<Account> signInManagerAccount,
+
         ITokenService tokenService,
-            ILogger<AccountController> logger,
-            IEmailSettings emailSettings,
-            RoleManager<IdentityRole> roleManager
+
+            IEmailSettings emailSettings
+
             )
         {
             _studentManager = studentManager;
@@ -51,12 +48,10 @@ namespace Elmnasa.Controllers
             _signInManagerTeacher = signInManagerTeacher;
             _AdminManager = AdminManager;
             _signInManagerAdmin = signInManagerAdmin;
-            _accountManager = accountManager;
-            _signInManagerAccount = signInManagerAccount;
+
             _tokenService = tokenService;
-            _logger = logger;
+
             _emailSettings = emailSettings;
-            _roleManager = roleManager;
         }
 
         [HttpPost("StudentRegister")]
@@ -118,7 +113,7 @@ namespace Elmnasa.Controllers
                     DisplayName = registerDto.DisplayName, // Set the display name
                     Email = registerDto.Email, // Set the email
                     Uid = registerDto.UId, // Set the unique identifier
-                    Token = _tokenService.CreateToken(user) // Generate a token for the user
+                    Token = await _tokenService.CreateToken(user) // Generate a token for the user
                 };
 
                 // Step 7: Return a success result with the created user data
@@ -185,7 +180,7 @@ namespace Elmnasa.Controllers
                 {
                     DisplayName = registerDto.DisplayName,
                     Email = registerDto.Email,
-                    Token = _tokenService.CreateToken(user) // Ensure the token creation is awaited
+                    Token = await _tokenService.CreateToken(user) // Ensure the token creation is awaited
                 };
 
                 // Step 7: Return a success result with the created user data
@@ -251,7 +246,7 @@ namespace Elmnasa.Controllers
                 {
                     DisplayName = registerDto.DisplayName,
                     Email = registerDto.Email,
-                    Token = _tokenService.CreateToken(user) // Ensure the token creation is awaited
+                    Token = await _tokenService.CreateToken(user) // Ensure the token creation is awaited
                 };
 
                 // Step 7: Return a success result with the created user data
@@ -324,8 +319,9 @@ namespace Elmnasa.Controllers
                 // Step 6: Create a response object with the user's email and a token
                 var returnedUser = new StudentDto
                 {
+                    id = user.Id,
                     Email = logInDto.Email,
-                    Token = _tokenService.CreateToken(user)
+                    Token = await _tokenService.CreateToken(user)
                 };
 
                 // Step 7: Return a success response with the created token
@@ -398,7 +394,7 @@ namespace Elmnasa.Controllers
                 var returnedUser = new TeacherDto
                 {
                     Email = logInDto.Email,
-                    Token = _tokenService.CreateToken(user)
+                    Token = await _tokenService.CreateToken(user)
                 };
 
                 // Step 7: Return a success response with the created token
@@ -471,7 +467,7 @@ namespace Elmnasa.Controllers
                 var returnedUser = new AdminDto
                 {
                     Email = logInDto.Email,
-                    Token = _tokenService.CreateToken(user)
+                    Token = await _tokenService.CreateToken(user)
                 };
 
                 // Step 7: Return a success response with the created token
@@ -514,7 +510,7 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 3: Generate a password reset token
-                var token = _tokenService.CreateToken(user);
+                var token = await _tokenService.CreateToken(user);
                 var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/Account/ResetPassword?email={user.Email}&Token={token}";
 
                 // Step 4: Create the email object
@@ -621,7 +617,7 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 4: Generate a password reset token
-                var token = _tokenService.CreateToken(user);
+                var token = await _tokenService.CreateToken(user);
                 var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/Account/ResetPassword?email={user.Email}&Token={token}";
 
                 // Step 5: Create the email object

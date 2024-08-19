@@ -9,7 +9,7 @@ namespace ElmnasaDomain.DTOs.StudentDTOs
     public class StudentDto
     {
         public string Email { get; set; }
-
+        public string id { get; set; }
         public long Uid { get; set; }
         public string DisplayName { get; set; }
         public string Token { get; set; }

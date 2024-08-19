@@ -1,9 +1,11 @@
 ﻿using ElmnasaApp.JWTToken.Intrefaces;
 using ElmnasaDomain.Entites.identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -15,20 +17,32 @@ namespace ElmnasaApp.JWTToken.WorkToken
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
+        private readonly UserManager<Account> _accountManager;
 
-        public TokenService(IConfiguration configuration)
+        public TokenService(IConfiguration configuration, UserManager<Account> accountManager)
         {
             _configuration = configuration;
+            _accountManager = accountManager;
         }
 
-        public string CreateToken(Account user)
+        public async Task<string> CreateToken(Account user)
         {
+            // Fetch user roles from the account manager
+            var roles = await _accountManager.GetRolesAsync(user);
             // Claims
             var UserClaim = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.DisplayName),
             };
+            // Add role claims
+            if (roles != null)
+            {
+                foreach (var role in roles)
+                {
+                    UserClaim.Add(new Claim(ClaimTypes.Role, role));
+                }
+            }
 
             // Security Key
             var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));

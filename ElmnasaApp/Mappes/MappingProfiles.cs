@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ElmnasaDomain.DTOs.GradesDTO;
+using ElmnasaDomain.Entites.app;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ namespace ElmnasaApp.Mappes
     {
         public MappingProfiles()
         {
+            CreateMap<Grades, GradeDto>().ReverseMap();
         }
     }
 }
