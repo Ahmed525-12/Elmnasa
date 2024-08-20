@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -16,10 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ElmnasaDomain\ElmnasaDomain.csproj" />
     <ProjectReference Include="..\ElmnasaInfrastructure\ElmnasaInfrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Specf\AppSpecf\GradesSpecf\" />
   </ItemGroup>
 
 </Project>
