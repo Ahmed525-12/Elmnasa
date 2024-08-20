@@ -72,10 +72,9 @@ namespace Elmnasa.Controllers
                     return BadRequest(Result<StudentDto>.Fail(errorMessage));
                 }
 
-                // Step 2: Check if a student with the provided email already exists
-                // This prevents duplicate registrations with the same email.
-                var studentExists = await CheckIfStudentExist(registerDto.Email);
-                if (studentExists != null)
+                // Check if the guest already exists
+                var guestExists = await CheckIfStudentExist(registerDto.Email);
+                if (guestExists.Value)
                 {
                     return BadRequest(new ApiResponse(400, "This Email Is Already Exist"));
                 }
@@ -145,8 +144,9 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 2: Check if a teacher with the provided email already exists
-                var teacherExists = await CheckIfTeacherExist(registerDto.Email);
-                if (teacherExists != null)
+                // Check if the guest already exists
+                var guestExists = await CheckIfTeacherExist(registerDto.Email);
+                if (guestExists.Value)
                 {
                     return BadRequest(new ApiResponse(400, "This Email Is Already Exist"));
                 }
@@ -212,8 +212,9 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 2: Check if an admin with the provided email already exists
-                var adminExists = await CheckIfAdminExist(registerDto.Email);
-                if (adminExists != null)
+                // Check if the guest already exists
+                var guestExists = await CheckIfAdminExist(registerDto.Email);
+                if (guestExists.Value)
                 {
                     return BadRequest(new ApiResponse(400, "This Email Is Already Exist"));
                 }
@@ -805,7 +806,7 @@ namespace Elmnasa.Controllers
         }
 
         [HttpGet("IsStudentExist")]
-        public async Task<IActionResult> CheckIfStudentExist([FromQuery] string email)
+        public async Task<ActionResult<bool>> CheckIfStudentExist([FromQuery] string email)
         {
             try
             {
@@ -844,7 +845,7 @@ namespace Elmnasa.Controllers
         }
 
         [HttpGet("IsTeacherExist")]
-        public async Task<IActionResult> CheckIfTeacherExist([FromQuery] string email)
+        public async Task<ActionResult<bool>> CheckIfTeacherExist([FromQuery] string email)
         {
             try
             {
@@ -883,7 +884,7 @@ namespace Elmnasa.Controllers
         }
 
         [HttpGet("IsAdminExist")]
-        public async Task<IActionResult> CheckIfAdminExist([FromQuery] string email)
+        public async Task<ActionResult<bool>> CheckIfAdminExist([FromQuery] string email)
         {
             try
             {
