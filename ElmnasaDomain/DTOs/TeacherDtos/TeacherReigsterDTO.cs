@@ -20,7 +20,6 @@ namespace ElmnasaDomain.DTOs.TeacherDtos
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Teacher Image is required")]
-        public string Teacher_Image { get; set; }
+        public string Teacher_Image { get; set; } = "";
     }
 }
