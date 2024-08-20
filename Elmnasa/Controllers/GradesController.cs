@@ -17,7 +17,6 @@ namespace Elmnasa.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Student,Admin")]
     public class GradesController : BaseController
     {
         private readonly IMapper _mapper;
@@ -31,6 +30,7 @@ namespace Elmnasa.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Roles = "Student,Admin")]
         [HttpPost("CreateGrade")]
         public async Task<ActionResult<GradeDto>> CreateGrade([FromBody] GradeDto model)
         {
@@ -72,6 +72,7 @@ namespace Elmnasa.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("UpdateGrade")]
         public async Task<ActionResult<GradeDto>> UpdateGrade([FromBody] UpdateGradeDTO model)
         {
@@ -108,6 +109,7 @@ namespace Elmnasa.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<GradeDto>> GetGradeById([FromQuery] int id)
         {
@@ -136,6 +138,7 @@ namespace Elmnasa.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGrade([FromQuery] int id)
         {
@@ -167,6 +170,7 @@ namespace Elmnasa.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GradeDto>>> GetAllGrades()
         {
@@ -190,6 +194,7 @@ namespace Elmnasa.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllUserGrades")]
         public async Task<ActionResult<IEnumerable<GradeDto>>> GetAllUserGrades()
         {
