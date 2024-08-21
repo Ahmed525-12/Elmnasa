@@ -15,6 +15,7 @@ namespace ElmnasaDomain.Entites.app
 
         public string Teacher_id { get; set; }
         public string Pdf_Url { get; set; }
+        public string PdfName { get; set; }
         private ICollection<Subject> Subject { get; set; }
     }
 }

@@ -9,5 +9,6 @@ namespace ElmnasaDomain.Entites.identity
     public class Teacher : Account
     {
         public string Teacher_Image { get; set; }
+        public bool IsVerfied { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace ElmnasaDomain.Entites.app
         public string Teacher_id { get; set; }
         public string Video_Url { get; set; }
         public string Video_Name { get; set; }
+        public string Description { get; set; }
         private ICollection<Subject> Subject { get; set; }
     }
 }

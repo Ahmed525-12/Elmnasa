@@ -8,9 +8,11 @@ using ElmnasaDomain.DTOs.EmailDTO;
 using ElmnasaDomain.DTOs.StudentDTOs;
 using ElmnasaDomain.DTOs.TeacherDtos;
 using ElmnasaDomain.Entites.identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 namespace Elmnasa.Controllers
@@ -851,6 +853,24 @@ namespace Elmnasa.Controllers
             {
                 // Handle any exceptions and return an error response
                 return StatusCode(500, Result<bool>.Fail($"An error occurred: {ex.Message}"));
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("VerfiedTeacher")]
+        public async Task<IActionResult> VerfiedTeacher(string Email)
+        {
+            try
+            {
+                var user = await _TeacherManager.FindByEmailAsync(Email);
+                user.IsVerfied = true;
+                await _TeacherManager.UpdateAsync(user);
+                return Ok(Result.Success("teacher is Verfied"));
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions and return an error response
+                return StatusCode(500, Result.Fail($"An error occurred: {ex.Message}"));
             }
         }
     }
