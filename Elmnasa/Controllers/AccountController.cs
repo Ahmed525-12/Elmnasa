@@ -336,7 +336,7 @@ namespace Elmnasa.Controllers
             catch (Exception ex)
             {
                 // Step 8: Handle any exceptions that occur during the process
-                return StatusCode(500, Result<StudentDto>.Fail(ex.Message));
+                return StatusCode(500, Result<AccountDTO>.Fail(ex.Message));
             }
         }
 
