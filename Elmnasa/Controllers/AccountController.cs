@@ -101,7 +101,11 @@ namespace Elmnasa.Controllers
                 var createResult = await _studentManager.CreateAsync(user, registerDto.Password);
                 if (!createResult.Succeeded)
                 {
-                    return BadRequest(new ApiResponse(400, "Register failed"));
+                    var errors = createResult.Errors.Select(e => e.Description).ToList();
+
+                    // Convert the list of errors into a single string or join them with a separator
+                    var errorMessage = string.Join("; ", errors);
+                    return Ok(Result<StudentDto>.Fail(errorMessage));
                 }
 
                 // Step 5: Assign the "Student" role to the newly created user
@@ -171,7 +175,11 @@ namespace Elmnasa.Controllers
                 var createResult = await _TeacherManager.CreateAsync(user, registerDto.Password);
                 if (!createResult.Succeeded)
                 {
-                    return BadRequest(new ApiResponse(400, "Register failed"));
+                    var errors = createResult.Errors.Select(e => e.Description).ToList();
+
+                    // Convert the list of errors into a single string or join them with a separator
+                    var errorMessage = string.Join("; ", errors);
+                    return Ok(Result<TeacherDto>.Fail(errorMessage));
                 }
 
                 // Step 5: Assign the "Teacher" role to the newly created user
@@ -238,7 +246,11 @@ namespace Elmnasa.Controllers
                 var createResult = await _AdminManager.CreateAsync(user, registerDto.Password);
                 if (!createResult.Succeeded)
                 {
-                    return BadRequest(new ApiResponse(400, "Register failed"));
+                    var errors = createResult.Errors.Select(e => e.Description).ToList();
+
+                    // Convert the list of errors into a single string or join them with a separator
+                    var errorMessage = string.Join("; ", errors);
+                    return Ok(Result<AdminDto>.Fail(errorMessage));
                 }
 
                 // Step 5: Assign the "Admin" role to the newly created user
@@ -320,7 +332,7 @@ namespace Elmnasa.Controllers
                         return BadRequest(new ApiResponse(400, "Two-factor authentication required"));
 
                     // If none of the above, return a generic invalid login attempt message
-                    return BadRequest(new ApiResponse(400, "Invalid login attempt"));
+                    return BadRequest(new ApiResponse(400, "Password or email is wrong"));
                 }
 
                 // Step 6: Create a response object with the user's email and a token
@@ -395,7 +407,7 @@ namespace Elmnasa.Controllers
                         return BadRequest(new ApiResponse(400, "Two-factor authentication required"));
 
                     // If none of the above, return a generic invalid login attempt message
-                    return BadRequest(new ApiResponse(400, "Invalid login attempt"));
+                    return BadRequest(new ApiResponse(400, "Password or email is wrong"));
                 }
 
                 // Step 6: Create a response object with the user's email and a token
