@@ -2,6 +2,7 @@
 using ElmnasaApp.ErrorHandler;
 using ElmnasaApp.JWTToken.Intrefaces;
 using ElmnasaApp.Wrapper.WorkWrapper;
+using ElmnasaDomain.DTOs.Account;
 using ElmnasaDomain.DTOs.AdminDtos;
 using ElmnasaDomain.DTOs.EmailDTO;
 using ElmnasaDomain.DTOs.StudentDTOs;
@@ -26,7 +27,8 @@ namespace Elmnasa.Controllers
         private readonly SignInManager<Teacher> _signInManagerTeacher;
         private readonly UserManager<Admin> _AdminManager;
         private readonly SignInManager<Admin> _signInManagerAdmin;
-
+        private readonly UserManager<Account> _accountManager;
+        private readonly SignInManager<Account> _signInManagerAccount;
         private readonly ITokenService _tokenService;
 
         public AccountController(UserManager<Student> studentManager,
@@ -35,7 +37,8 @@ namespace Elmnasa.Controllers
         SignInManager<Teacher> signInManagerTeacher,
          UserManager<Admin> AdminManager,
         SignInManager<Admin> signInManagerAdmin,
-
+           UserManager<Account> AccountManager,
+        SignInManager<Account> signInManagerAccount,
         ITokenService tokenService,
 
             IEmailSettings emailSettings
@@ -48,7 +51,8 @@ namespace Elmnasa.Controllers
             _signInManagerTeacher = signInManagerTeacher;
             _AdminManager = AdminManager;
             _signInManagerAdmin = signInManagerAdmin;
-
+            _accountManager = AccountManager;
+            _signInManagerAccount = signInManagerAccount;
             _tokenService = tokenService;
 
             _emailSettings = emailSettings;
@@ -261,8 +265,8 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [HttpPost("StudentLogin")]
-        public async Task<ActionResult<StudentDto>> StudentLogin([FromBody] StudentDtoLogIn logInDto)
+        [HttpPost("AccountLogin")]
+        public async Task<ActionResult<AccountDTO>> AccountLogin([FromBody] StudentDtoLogIn logInDto)
         {
             try
             {
@@ -279,7 +283,7 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 2: Find the user by email
-                var user = await _studentManager.FindByEmailAsync(logInDto.Email);
+                var user = await _accountManager.FindByEmailAsync(logInDto.Email);
                 if (user == null)
                 {
                     // If the user is not found, return an Unauthorized response
@@ -294,15 +298,15 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 4: Check if the user is locked out
-                if (await _studentManager.IsLockedOutAsync(user))
+                if (await _accountManager.IsLockedOutAsync(user))
                 {
                     // If the user is locked out, return a BadRequest response
                     return BadRequest(new ApiResponse(400, "User is locked out"));
                 }
 
                 // Step 5: Check the user's password
-                var resultcode = await _signInManagerStudent.CheckPasswordSignInAsync(user, logInDto.Password, false);
-
+                var resultcode = await _signInManagerAccount.CheckPasswordSignInAsync(user, logInDto.Password, false);
+                var roleName = await _accountManager.GetRolesAsync(user);
                 if (!resultcode.Succeeded)
                 {
                     // If the password check fails, return appropriate error messages
@@ -318,93 +322,21 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 6: Create a response object with the user's email and a token
-                var returnedUser = new StudentDto
+                var returnedUser = new AccountDTO
                 {
-                    id = user.Id,
                     Email = logInDto.Email,
-                    Token = await _tokenService.CreateToken(user)
+                    Token = await _tokenService.CreateToken(user),
+                    DisplayName = user.DisplayName,
+                    RoleName = (List<string>)roleName
                 };
 
                 // Step 7: Return a success response with the created token
-                return Ok(Result<StudentDto>.Success(returnedUser, "Login successful"));
+                return Ok(Result<AccountDTO>.Success(returnedUser, "Login successful"));
             }
             catch (Exception ex)
             {
                 // Step 8: Handle any exceptions that occur during the process
                 return StatusCode(500, Result<StudentDto>.Fail(ex.Message));
-            }
-        }
-
-        [HttpPost("TeacherLogin")]
-        public async Task<ActionResult<TeacherDto>> TeacherLogin([FromBody] TeacherDtoLogIn logInDto)
-        {
-            try
-            {
-                // Step 1: Validate the incoming model state
-                if (!ModelState.IsValid)
-                {
-                    // Extract the error messages from ModelState
-                    var errors = ModelState.Values.SelectMany(v => v.Errors)
-                                                   .Select(e => e.ErrorMessage)
-                                                   .ToList();
-                    // Convert the list of errors into a single string or pass the list itself if your Fail method supports it
-                    var errorMessage = string.Join("; ", errors);
-                    return BadRequest(Result<TeacherDto>.Fail(errorMessage));
-                }
-
-                // Step 2: Find the user by email
-                var user = await _TeacherManager.FindByEmailAsync(logInDto.Email);
-                if (user == null)
-                {
-                    // If the user is not found, return an Unauthorized response
-                    return Unauthorized(new ApiResponse(401, "User Not Found"));
-                }
-
-                // Step 3: Check if the email is confirmed
-                if (!user.EmailConfirmed)
-                {
-                    // If the email is not confirmed, return a BadRequest response
-                    return BadRequest(new ApiResponse(400, "Email not confirmed"));
-                }
-
-                // Step 4: Check if the user is locked out
-                if (await _TeacherManager.IsLockedOutAsync(user))
-                {
-                    // If the user is locked out, return a BadRequest response
-                    return BadRequest(new ApiResponse(400, "User is locked out"));
-                }
-
-                // Step 5: Check the user's password
-                var resultcode = await _signInManagerTeacher.CheckPasswordSignInAsync(user, logInDto.Password, false);
-
-                if (!resultcode.Succeeded)
-                {
-                    // If the password check fails, return appropriate error messages
-                    if (resultcode.IsLockedOut)
-                        return BadRequest(new ApiResponse(400, "User is locked out"));
-                    if (resultcode.IsNotAllowed)
-                        return BadRequest(new ApiResponse(400, "User is not allowed to sign in"));
-                    if (resultcode.RequiresTwoFactor)
-                        return BadRequest(new ApiResponse(400, "Two-factor authentication required"));
-
-                    // If none of the above, return a generic invalid login attempt message
-                    return BadRequest(new ApiResponse(400, "Invalid login attempt"));
-                }
-
-                // Step 6: Create a response object with the user's email and a token
-                var returnedUser = new TeacherDto
-                {
-                    Email = logInDto.Email,
-                    Token = await _tokenService.CreateToken(user)
-                };
-
-                // Step 7: Return a success response with the created token
-                return Ok(Result<TeacherDto>.Success(returnedUser, "Login successful"));
-            }
-            catch (Exception ex)
-            {
-                // Step 8: Handle any exceptions that occur during the process
-                return Ok(Result<TeacherDto>.Fail(ex.Message));
             }
         }
 
