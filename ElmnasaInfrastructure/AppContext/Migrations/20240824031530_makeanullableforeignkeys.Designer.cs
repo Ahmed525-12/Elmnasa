@@ -4,6 +4,7 @@ using ElmnasaInfrastructure.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElmnasaInfrastructure.AppContext.Migrations
 {
     [DbContext(typeof(ElmnasaContext))]
-    partial class ElmnasaContextModelSnapshot : ModelSnapshot
+    [Migration("20240824031530_makeanullableforeignkeys")]
+    partial class makeanullableforeignkeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +39,10 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("QuestionId")
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Question_id")
                         .HasColumnType("int");
 
                     b.Property<bool>("isTrue")
@@ -125,14 +130,11 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Account_id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("QuizId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Subject_Name")
@@ -140,12 +142,19 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("SubscribeSubjectId")
+                        .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<string>("Teacher_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("UploadPdfId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("UploadVideoId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -250,7 +259,8 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
                     b.HasOne("ElmnasaDomain.Entites.app.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Question");
                 });
@@ -260,22 +270,26 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
                     b.HasOne("ElmnasaDomain.Entites.app.Quiz", "Quiz")
                         .WithMany()
                         .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("ElmnasaDomain.Entites.app.SubscribeSubject", "SubscribeSubject")
                         .WithMany()
                         .HasForeignKey("SubscribeSubjectId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("ElmnasaDomain.Entites.app.UploadPdf", "UploadPdf")
                         .WithMany()
                         .HasForeignKey("UploadPdfId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("ElmnasaDomain.Entites.app.UploadVideo", "UploadVideo")
                         .WithMany()
                         .HasForeignKey("UploadVideoId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Quiz");
 

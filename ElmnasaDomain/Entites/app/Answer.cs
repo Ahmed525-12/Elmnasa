@@ -11,10 +11,10 @@ namespace ElmnasaDomain.Entites.app
     {
         public string Name { get; set; }
         public bool isTrue { get; set; }
-        public int Question_id { get; set; }
-        public int QuestionId { get; set; }
+
+        public int? QuestionId { get; set; }
 
         [ForeignKey("QuestionId")]
-        public Question Question { get; set; }
+        public Question? Question { get; set; }
     }
 }

@@ -26,30 +26,30 @@ namespace ElmnasaInfrastructure.AppContext
                 .HasOne(d => d.SubscribeSubject)
                 .WithMany()
                 .HasForeignKey(d => d.SubscribeSubjectId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Subject>()
                 .HasOne(d => d.UploadPdf)
                 .WithMany()
                 .HasForeignKey(d => d.UploadPdfId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Subject>()
                 .HasOne(m => m.UploadVideo)
                 .WithMany()
                 .HasForeignKey(m => m.UploadVideoId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Subject>()
               .HasOne(m => m.Quiz)
               .WithMany()
               .HasForeignKey(m => m.QuizId)
-              .OnDelete(DeleteBehavior.Restrict);
+              .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Answer>()
             .HasOne(m => m.Question)
             .WithMany()
             .HasForeignKey(m => m.QuestionId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.SetNull);
         }
 
         public DbSet<Answer> Answer { get; set; }

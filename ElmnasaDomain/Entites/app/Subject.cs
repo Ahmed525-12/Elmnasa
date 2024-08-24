@@ -11,25 +11,26 @@ namespace ElmnasaDomain.Entites.app
     public class Subject : BaseEntity
     {
         public string Subject_Name { get; set; }
-        public string Teacher_id { get; set; }
-        public int SubscribeSubjectId { get; set; }
+        public string Account_id { get; set; }
+
+        public int? SubscribeSubjectId { get; set; } = null;
 
         [ForeignKey("SubscribeSubjectId")]
-        public SubscribeSubject SubscribeSubject { get; set; }
+        public SubscribeSubject? SubscribeSubject { get; set; }
 
-        public int UploadPdfId { get; set; }
+        public int? UploadPdfId { get; set; } = null;
 
         [ForeignKey("UploadPdfId")]
-        public UploadPdf UploadPdf { get; set; }
+        public UploadPdf? UploadPdf { get; set; }
 
-        public int UploadVideoId { get; set; }
+        public int? UploadVideoId { get; set; } = null;
 
         [ForeignKey("UploadVideoId")]
-        public UploadVideo UploadVideo { get; set; }
+        public UploadVideo? UploadVideo { get; set; }
 
-        public int QuizId { get; set; }
+        public int? QuizId { get; set; } = null;
 
         [ForeignKey("QuizId")]
-        public Quiz Quiz { get; set; }
+        public Quiz? Quiz { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using ElmnasaInfrastructure.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElmnasaInfrastructure.AppContext.Migrations
 {
     [DbContext(typeof(ElmnasaContext))]
-    partial class ElmnasaContextModelSnapshot : ModelSnapshot
+    [Migration("20240824155137_addnullable")]
+    partial class addnullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,10 +127,6 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Account_id")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -141,6 +139,10 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
 
                     b.Property<int?>("SubscribeSubjectId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Teacher_id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UploadPdfId")
                         .HasColumnType("int");
