@@ -24,9 +24,9 @@ namespace Elmnasa.Controllers
         private readonly IEmailSettings _emailSettings;
 
         private readonly UserManager<Student> _studentManager;
-        private readonly SignInManager<Student> _signInManagerStudent;
+
         private readonly UserManager<Teacher> _TeacherManager;
-        private readonly SignInManager<Teacher> _signInManagerTeacher;
+
         private readonly UserManager<Admin> _AdminManager;
         private readonly SignInManager<Admin> _signInManagerAdmin;
         private readonly UserManager<Account> _accountManager;
@@ -34,9 +34,9 @@ namespace Elmnasa.Controllers
         private readonly ITokenService _tokenService;
 
         public AccountController(UserManager<Student> studentManager,
-        SignInManager<Student> signInManagerStudent,
+
         UserManager<Teacher> TeacherManager,
-        SignInManager<Teacher> signInManagerTeacher,
+
          UserManager<Admin> AdminManager,
         SignInManager<Admin> signInManagerAdmin,
            UserManager<Account> AccountManager,
@@ -48,9 +48,9 @@ namespace Elmnasa.Controllers
             )
         {
             _studentManager = studentManager;
-            _signInManagerStudent = signInManagerStudent;
+
             _TeacherManager = TeacherManager;
-            _signInManagerTeacher = signInManagerTeacher;
+
             _AdminManager = AdminManager;
             _signInManagerAdmin = signInManagerAdmin;
             _accountManager = AccountManager;
