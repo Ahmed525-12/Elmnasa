@@ -109,7 +109,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Student")]
         [HttpGet("{id}")]
         public async Task<ActionResult<GradeDto>> GetGradeById([FromQuery] int id)
         {
@@ -194,7 +194,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpGet("GetAllUserGrades")]
         public async Task<ActionResult<IEnumerable<GradeDto>>> GetAllUserGrades()
         {

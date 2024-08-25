@@ -2,6 +2,7 @@
 using ElmnasaApp.ErrorHandler;
 using ElmnasaApp.Genrics.Intrefaces;
 using ElmnasaApp.Specf.AppSpecf.GradesSpecf;
+using ElmnasaApp.Specf.AppSpecf.SubjectSpecf;
 using ElmnasaApp.Wrapper.WorkWrapper;
 using ElmnasaDomain.DTOs.GradesDTO;
 using ElmnasaDomain.DTOs.SubjectDTOS;
@@ -65,20 +66,20 @@ namespace Elmnasa.Controllers
                 await _unitOfWork.CompleteAsync();
 
                 // Return a success response with the model data
-                return Ok(Result<SubjectDTO>.Success(model, "Create successful"));
+                return Ok(Result<Subject>.Success(Subject, "Create successful"));
             }
             catch (Exception ex)
             {
                 // Log the exception details here if logging is set up
 
                 // Return a failure response with the exception message
-                return Ok(Result<GradeDto>.Fail(ex.Message));
+                return Ok(Result<SubjectDTO>.Fail(ex.Message));
             }
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpPost("UpdateGrade")]
-        public async Task<ActionResult<GradeDto>> UpdateGrade([FromBody] UpdateGradeDTO model)
+        [Authorize(Roles = "Admin,Teacher")]
+        [HttpPost("UpdateSubject")]
+        public async Task<ActionResult<SubjectDTO>> UpdateSubject([FromBody] UpdateSubjectDto model)
         {
             try
             {
@@ -89,77 +90,77 @@ namespace Elmnasa.Controllers
                     return BadRequest(new ApiResponse(400, "Invalid request data."));
                 }
 
-                // Map the UpdateGradeDTO to a Grades entity
-                var mapped = _mapper.Map<Grades>(model);
+                // Map the UpdateSubjectDTO to a Subject entity
+                var mapped = _mapper.Map<Subject>(model);
 
                 // Validate the mapping result
                 if (mapped == null)
                 {
                     // Return a BadRequest response if mapping failed
-                    return BadRequest(new ApiResponse(400, "Failed to map UpdateGradeDTO to Grades."));
+                    return BadRequest(new ApiResponse(400, "Failed to map UpdateSubjectDTO to Subject."));
                 }
 
                 // Update the Grades entity in the repository asynchronously
-                _unitOfWork.Repository<Grades>().Update(mapped);
+                _unitOfWork.Repository<Subject>().Update(mapped);
                 await _unitOfWork.CompleteAsync();
 
                 // Return a success response with the updated data
-                return Ok(Result<Grades>.Success(mapped, "Update successful"));
+                return Ok(Result<Subject>.Success(mapped, "Update successful"));
             }
             catch (Exception ex)
             {
                 // Return a failure response with the exception message
-                return Ok(Result<GradeDto>.Fail(ex.Message));
+                return Ok(Result<SubjectDTO>.Fail(ex.Message));
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<GradeDto>> GetGradeById([FromQuery] int id)
+        public async Task<ActionResult<SubjectDTO>> GetSubjectById([FromQuery] int id)
         {
             try
             {
-                // Retrieve the grade entity from the repository by ID
-                var grade = await _unitOfWork.Repository<Grades>().GetbyIdAsync(id);
+                // Retrieve the Subject entity from the repository by ID
+                var Subject = await _unitOfWork.Repository<Subject>().GetbyIdAsync(id);
 
-                // Check if the grade entity was found
-                if (grade is null)
+                // Check if the Subject entity was found
+                if (Subject is null)
                 {
-                    // Return a NotFound response if the grade is not found
-                    return NotFound(new ApiResponse(404, "Grade not found."));
+                    // Return a NotFound response if the Subject is not found
+                    return NotFound(new ApiResponse(404, "Subject not found."));
                 }
 
-                // Map the retrieved Grades entity to a GradeDto
-                var mappedItem = _mapper.Map<GradeDto>(grade);
+                // Map the retrieved Subjects entity to a SubjectDto
+                var mappedItem = _mapper.Map<SubjectDTO>(Subject);
 
                 // Return a success response with the mapped data
-                return Ok(Result<GradeDto>.Success(mappedItem, "Get successful"));
+                return Ok(Result<SubjectDTO>.Success(mappedItem, "Get successful"));
             }
             catch (Exception ex)
             {
                 // Return a failure response with the exception message
-                return Ok(Result<GradeDto>.Fail(ex.Message));
+                return Ok(Result<SubjectDTO>.Fail(ex.Message));
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGrade([FromQuery] int id)
+        public async Task<IActionResult> DeleteSubject([FromQuery] int id)
         {
             try
             {
-                // Retrieve the grade entity from the repository by ID
-                var grade = await _unitOfWork.Repository<Grades>().GetbyIdAsync(id);
+                // Retrieve the Subject entity from the repository by ID
+                var Subject = await _unitOfWork.Repository<Subject>().GetbyIdAsync(id);
 
-                // Check if the grade entity was found
-                if (grade == null)
+                // Check if the Subject entity was found
+                if (Subject == null)
                 {
-                    // Return a NotFound response if the grade is not found
-                    return NotFound(new ApiResponse(404, "Grade not found"));
+                    // Return a NotFound response if the Subject is not found
+                    return NotFound(new ApiResponse(404, "Subject not found"));
                 }
 
-                // Delete the grade entity from the repository asynchronously
-                _unitOfWork.Repository<Grades>().DeleteAsync(grade);
+                // Delete the Subject entity from the repository asynchronously
+                _unitOfWork.Repository<Subject>().DeleteAsync(Subject);
 
                 // Save changes to the database
                 await _unitOfWork.CompleteAsync();
@@ -170,37 +171,32 @@ namespace Elmnasa.Controllers
             catch (Exception ex)
             {
                 // Return a failure response with the exception message
-                return Ok(Result<GradeDto>.Fail(ex.Message));
+                return Ok(Result<SubjectDTO>.Fail(ex.Message));
             }
         }
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GradeDto>>> GetAllGrades()
+        public async Task<ActionResult<IEnumerable<SubjectDTO>>> GetAllSubjects()
         {
             try
             {
-                // Retrieve all grade entities from the repository asynchronously
-                var grades = await _unitOfWork.Repository<Grades>().GetAllWithAsync();
-
-                // If the repository returns null or an empty list, you might want to handle that scenario
-
-                // Map the list of Grades entities to a list of GradeDto
-                var mappedGrades = _mapper.Map<IEnumerable<GradeDto>>(grades);
+                // Retrieve all Subject entities from the repository asynchronously
+                var Subjects = await _unitOfWork.Repository<Subject>().GetAllWithAsync();
 
                 // Return a success response with the mapped list
-                return Ok(Result<IEnumerable<GradeDto>>.Success(mappedGrades, "Get all grades successful"));
+                return Ok(Result<IEnumerable<Subject>>.Success(Subjects, "Get all Subjects successful"));
             }
             catch (Exception ex)
             {
                 // Return a failure response with the exception message
-                return Ok(Result<IEnumerable<GradeDto>>.Fail(ex.Message));
+                return Ok(Result<IEnumerable<SubjectDTO>>.Fail(ex.Message));
             }
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("GetAllUserGrades")]
-        public async Task<ActionResult<IEnumerable<GradeDto>>> GetAllUserGrades()
+        [Authorize(Roles = "Admin,Teacher")]
+        [HttpGet("GetAllUserSubjects")]
+        public async Task<ActionResult<IEnumerable<SubjectDTO>>> GetAllUserSubjects()
         {
             try
             {
@@ -210,22 +206,22 @@ namespace Elmnasa.Controllers
                 // Fetch the user details based on the retrieved email
                 var user = await _userManager.FindByEmailAsync(userEmail);
 
-                // Create a specification for retrieving the user's grades
-                var spec = new UserGradeSpecf(user.Id);
+                // Create a specification for retrieving the user's Subjects
+                var spec = new UserSubjectSpecf(user.Id);
 
-                // Retrieve the grades for the specified user based on the specification
-                var userGrades = await _unitOfWork.Repository<Grades>().GetAllWithSpecAsync(spec);
+                // Retrieve the Subjects for the specified user based on the specification
+                var userSubjects = await _unitOfWork.Repository<Subject>().GetAllWithSpecAsync(spec);
 
-                // Map the list of Grades entities to a list of GradeDto
-                var mappedResult = _mapper.Map<List<GradeDto>>(userGrades);
+                // Map the list of Subjects entities to a list of SubjectDto
+                var mappedResult = _mapper.Map<List<SubjectDTO>>(userSubjects);
 
                 // Return a success response with the mapped list
-                return Ok(Result<IEnumerable<GradeDto>>.Success(mappedResult, "Get all user grades successful"));
+                return Ok(Result<IEnumerable<SubjectDTO>>.Success(mappedResult, "Get all user Subjects successful"));
             }
             catch (Exception ex)
             {
                 // Return a failure response with the exception message
-                return Ok(Result<GradeDto>.Fail(ex.Message));
+                return Ok(Result<SubjectDTO>.Fail(ex.Message));
             }
         }
     }
