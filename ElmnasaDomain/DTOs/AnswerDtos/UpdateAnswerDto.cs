@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElmnasaDomain.DTOs.SubjectDTOS
+namespace ElmnasaDomain.DTOs.AnswerDtos
 {
-    public class UpdateSubjectDto
+    public class UpdateAnswerDto
     {
-        public string Subject_Name { get; set; }
-
+        public string Name { get; set; }
+        public bool isTrue { get; set; }
         public int id { get; set; }
-        public string Account_id { get; set; }
+        public string Teacher_id { get; set; }
     }
 }
