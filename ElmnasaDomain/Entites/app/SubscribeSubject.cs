@@ -15,6 +15,6 @@ namespace ElmnasaDomain.Entites.app
 
         public string Teacher_id { get; set; }
         public string Student_id { get; set; }
-        private ICollection<Subject> Subject { get; set; }
+        public ICollection<Subject> Subject { get; set; }
     }
 }

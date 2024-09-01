@@ -55,7 +55,7 @@ namespace Elmnasa.Controllers
                 {
                     Subject_Name = model.Subject_Name,
                     Account_id = user.Id,
-                    SubscribeSubjectId = null,
+
                     UploadPdfId = null,
                     UploadVideoId = null,
                     QuizId = null

@@ -13,10 +13,7 @@ namespace ElmnasaDomain.Entites.app
         public string Subject_Name { get; set; }
         public string Account_id { get; set; }
 
-        public int? SubscribeSubjectId { get; set; } = null;
-
-        [ForeignKey("SubscribeSubjectId")]
-        public SubscribeSubject? SubscribeSubject { get; set; }
+        public ICollection<SubscribeSubject> SubscribeSubject { get; set; }
 
         public int? UploadPdfId { get; set; } = null;
 

@@ -23,10 +23,11 @@ namespace ElmnasaInfrastructure.AppContext
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Subject>()
-                .HasOne(d => d.SubscribeSubject)
-                .WithMany()
-                .HasForeignKey(d => d.SubscribeSubjectId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasMany(SS => SS.SubscribeSubject)
+                .WithMany(S => S.Subject)
+                .UsingEntity(j => j.ToTable("StudentSubscribeSubject"))
+
+           ;
 
             modelBuilder.Entity<Subject>()
                 .HasOne(d => d.UploadPdf)
