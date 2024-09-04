@@ -11,5 +11,7 @@ namespace ElmnasaDomain.DTOs.SubjectDTOS
     {
         [Required(ErrorMessage = "Subject Name is required ")]
         public string Subject_Name { get; set; }
+
+        public string Account_id { get; set; }
     }
 }

@@ -175,7 +175,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Student")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SubjectDTO>>> GetAllSubjects()
         {
