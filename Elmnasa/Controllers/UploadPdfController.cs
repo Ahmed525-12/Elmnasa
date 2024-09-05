@@ -56,7 +56,8 @@ namespace Elmnasa.Controllers
         {
             try
             {
-                var UploadPdf = await _unitOfWork.Repository<UploadPdf>().GetbyIdAsync(id);
+                var specf = new UploadPdfGetbyIdSpecf(id);
+                var UploadPdf = await _unitOfWork.Repository<UploadPdf>().GetAllWithSpecAsync(specf);
 
                 if (UploadPdf == null)
                 {
@@ -64,8 +65,8 @@ namespace Elmnasa.Controllers
                     return NotFound(new ApiResponse(404, "UploadPdf not found."));
                 }
 
-                var UploadPdfDto = _mapper.Map<UploadPdfReadDto>(UploadPdf);
-                return Ok(Result<UploadPdfReadDto>.Success(UploadPdfDto, "Get by id UploadPdf successful"));
+                var UploadPdfDto = _mapper.Map<List<UploadPdfReadDto>>(UploadPdf);
+                return Ok(Result<List<UploadPdfReadDto>>.Success(UploadPdfDto, "Get by id UploadPdf successful"));
             }
             catch (Exception ex)
             {

@@ -56,7 +56,8 @@ namespace Elmnasa.Controllers
         {
             try
             {
-                var UploadVideo = await _unitOfWork.Repository<UploadVideo>().GetbyIdAsync(id);
+                var specf = new UploadVideoGetbyIdSpecf(id);
+                var UploadVideo = await _unitOfWork.Repository<UploadVideo>().GetAllWithSpecAsync(specf);
 
                 if (UploadVideo == null)
                 {
@@ -64,8 +65,8 @@ namespace Elmnasa.Controllers
                     return NotFound(new ApiResponse(404, "UploadVideo not found."));
                 }
 
-                var UploadVideoDto = _mapper.Map<UploadVideoReadDto>(UploadVideo);
-                return Ok(Result<UploadVideoReadDto>.Success(UploadVideoDto, "Get by id UploadVideo successful"));
+                var UploadVideoDto = _mapper.Map<List<UploadVideoReadDto>>(UploadVideo);
+                return Ok(Result<List<UploadVideoReadDto>>.Success(UploadVideoDto, "Get by id UploadVideo successful"));
             }
             catch (Exception ex)
             {
