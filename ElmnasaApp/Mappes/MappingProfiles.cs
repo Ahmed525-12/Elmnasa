@@ -2,6 +2,7 @@
 using ElmnasaDomain.DTOs.GradesDTO;
 using ElmnasaDomain.DTOs.SubjectDTOS;
 using ElmnasaDomain.DTOs.SubscribeSubjectDTO;
+using ElmnasaDomain.DTOs.UploadPdfDTOs;
 using ElmnasaDomain.Entites.app;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,12 @@ namespace ElmnasaApp.Mappes
             CreateMap<SubscribeSubject, SubscribeSubjectReadDto>()
          .ForMember(dest => dest.Subjects, opt => opt.MapFrom(src => src.Subject));
             CreateMap<SubscribeSubjectCreateDto, SubscribeSubject>()
+            .ForMember(dest => dest.Subject, opt => opt.Ignore());
+
+            CreateMap<UploadPdf, UploadPdfReadDto>()
+          .ForMember(dest => dest.SubjectIds, opt => opt.MapFrom(src => src.Subject.Select(s => s.Id)));
+
+            CreateMap<UploadPdfCreateDto, UploadPdf>()
             .ForMember(dest => dest.Subject, opt => opt.Ignore());
         }
     }

@@ -14,8 +14,9 @@ namespace ElmnasaDomain.Entites.app
             Subject = new HashSet<Subject>();
         }
 
+        public int Grade { get; set; }
         public string Teacher_id { get; set; }
-        private ICollection<Question> Question { get; set; }
-        private ICollection<Subject> Subject { get; set; }
+        public ICollection<Question> Question { get; set; }
+        public ICollection<Subject> Subject { get; set; }
     }
 }

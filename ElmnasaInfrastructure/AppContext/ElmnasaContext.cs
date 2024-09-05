@@ -30,27 +30,32 @@ namespace ElmnasaInfrastructure.AppContext
            ;
 
             modelBuilder.Entity<Subject>()
-                .HasOne(d => d.UploadPdf)
-                .WithMany()
-                .HasForeignKey(d => d.UploadPdfId)
-                .OnDelete(DeleteBehavior.SetNull);
+             .HasMany(SS => SS.UploadPdf)
+             .WithMany(S => S.Subject)
+             .UsingEntity(j => j.ToTable("subjectuploadpdf"))
+
+        ;
 
             modelBuilder.Entity<Subject>()
-                .HasOne(m => m.UploadVideo)
-                .WithMany()
-                .HasForeignKey(m => m.UploadVideoId)
-                .OnDelete(DeleteBehavior.SetNull);
+             .HasMany(SS => SS.UploadVideo)
+             .WithMany(S => S.Subject)
+             .UsingEntity(j => j.ToTable("subjectuploadVideo"))
+
+        ;
 
             modelBuilder.Entity<Subject>()
-              .HasOne(m => m.Quiz)
-              .WithMany()
-              .HasForeignKey(m => m.QuizId)
-              .OnDelete(DeleteBehavior.SetNull);
+              .HasMany(SS => SS.Quiz)
+              .WithMany(S => S.Subject)
+              .UsingEntity(j => j.ToTable("subjectQuiz"))
+
+         ;
+
             modelBuilder.Entity<Answer>()
-            .HasOne(m => m.Question)
-            .WithMany()
-            .HasForeignKey(m => m.QuestionId)
-            .OnDelete(DeleteBehavior.SetNull);
+         .HasMany(SS => SS.Question)
+         .WithMany(S => S.Answers)
+         .UsingEntity(j => j.ToTable("AnswersQuetions"))
+
+    ;
         }
 
         public DbSet<Answer> Answer { get; set; }

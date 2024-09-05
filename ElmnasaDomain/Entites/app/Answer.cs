@@ -12,9 +12,6 @@ namespace ElmnasaDomain.Entites.app
         public string Name { get; set; }
         public bool isTrue { get; set; }
         public string Teacher_id { get; set; }
-        public int? QuestionId { get; set; }
-
-        [ForeignKey("QuestionId")]
-        public Question? Question { get; set; }
+        public ICollection<Question> Question { get; set; }
     }
 }

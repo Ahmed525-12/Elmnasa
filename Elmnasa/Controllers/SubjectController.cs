@@ -55,10 +55,6 @@ namespace Elmnasa.Controllers
                 {
                     Subject_Name = model.Subject_Name,
                     Account_id = user.Id,
-
-                    UploadPdfId = null,
-                    UploadVideoId = null,
-                    QuizId = null
                 };
 
                 // Add the new Subject entity to the repository and save changes

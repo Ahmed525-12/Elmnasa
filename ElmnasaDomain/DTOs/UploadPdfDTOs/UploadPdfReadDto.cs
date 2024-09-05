@@ -4,18 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ElmnasaDomain.Entites.app
+namespace ElmnasaDomain.DTOs.UploadPdfDTOs
 {
-    public class UploadPdf : BaseEntity
+    public class UploadPdfReadDto
     {
-        public UploadPdf()
-        {
-            Subject = new HashSet<Subject>();
-        }
-
+        public int Id { get; set; }
+        public List<int> SubjectIds { get; set; } // List of Subject IDs
         public string Teacher_id { get; set; }
         public string Pdf_Url { get; set; }
         public string PdfName { get; set; }
-        public ICollection<Subject> Subject { get; set; }
     }
 }
