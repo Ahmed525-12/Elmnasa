@@ -130,7 +130,7 @@ namespace Elmnasa.Controllers
 
                 _unitOfWork.Repository<SubscribeSubject>().DeleteAsync(subscribeSubject);
                 await _unitOfWork.CompleteAsync();
-                return NoContent();
+                return Ok(Result<SubscribeSubjectReadDto>.Success("SubscribeSubject Delete successfully"));
             }
             catch (Exception ex)
             {

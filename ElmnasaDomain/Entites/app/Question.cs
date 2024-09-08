@@ -13,9 +13,11 @@ namespace ElmnasaDomain.Entites.app
             Answers = new HashSet<Answer>();
         }
 
+        public string Teacher_id { get; set; }
         public string Question_Name { get; set; }
 
         public ICollection<Answer> Answers { get; set; }
+        public ICollection<Quiz> Quiz { get; set; }
         public int Degree { get; set; }
     }
 }

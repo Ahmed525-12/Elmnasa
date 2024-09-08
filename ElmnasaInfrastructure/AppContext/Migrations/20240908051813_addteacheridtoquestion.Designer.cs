@@ -4,6 +4,7 @@ using ElmnasaInfrastructure.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElmnasaInfrastructure.AppContext.Migrations
 {
     [DbContext(typeof(ElmnasaContext))]
-    partial class ElmnasaContextModelSnapshot : ModelSnapshot
+    [Migration("20240908051813_addteacheridtoquestion")]
+    partial class addteacheridtoquestion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,11 +108,16 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("QuizId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Teacher_id")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("QuizId");
 
                     b.ToTable("Question");
                 });
@@ -242,21 +249,6 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
                     b.ToTable("UploadVideo");
                 });
 
-            modelBuilder.Entity("QuestionQuiz", b =>
-                {
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuizId")
-                        .HasColumnType("int");
-
-                    b.HasKey("QuestionId", "QuizId");
-
-                    b.HasIndex("QuizId");
-
-                    b.ToTable("QuizQuetions", (string)null);
-                });
-
             modelBuilder.Entity("QuizSubject", b =>
                 {
                     b.Property<int>("QuizId")
@@ -269,7 +261,7 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("QuizSubjects", (string)null);
+                    b.ToTable("subjectQuiz", (string)null);
                 });
 
             modelBuilder.Entity("SubjectSubscribeSubject", b =>
@@ -332,19 +324,11 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("QuestionQuiz", b =>
+            modelBuilder.Entity("ElmnasaDomain.Entites.app.Question", b =>
                 {
-                    b.HasOne("ElmnasaDomain.Entites.app.Question", null)
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ElmnasaDomain.Entites.app.Quiz", null)
-                        .WithMany()
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Question")
+                        .HasForeignKey("QuizId");
                 });
 
             modelBuilder.Entity("QuizSubject", b =>
@@ -405,6 +389,11 @@ namespace ElmnasaInfrastructure.AppContext.Migrations
                         .HasForeignKey("UploadVideoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ElmnasaDomain.Entites.app.Quiz", b =>
+                {
+                    b.Navigation("Question");
                 });
 #pragma warning restore 612, 618
         }

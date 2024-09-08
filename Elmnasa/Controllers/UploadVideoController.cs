@@ -130,7 +130,7 @@ namespace Elmnasa.Controllers
 
                 _unitOfWork.Repository<UploadVideo>().DeleteAsync(UploadVideo);
                 await _unitOfWork.CompleteAsync();
-                return NoContent();
+                return Ok(Result<UploadVideoReadDto>.Success("UploadVideo delete successfully"));
             }
             catch (Exception ex)
             {

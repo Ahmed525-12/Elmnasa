@@ -53,9 +53,18 @@ namespace ElmnasaInfrastructure.AppContext
             modelBuilder.Entity<Answer>()
          .HasMany(SS => SS.Question)
          .WithMany(S => S.Answers)
-         .UsingEntity(j => j.ToTable("AnswersQuetions"))
+         .UsingEntity(j => j.ToTable("AnswersQuetions"));
 
-    ;
+            modelBuilder.Entity<Quiz>()
+     .HasMany(SS => SS.Question)
+     .WithMany(S => S.Quiz)
+     .UsingEntity(j => j.ToTable("QuizQuetions"))
+;
+            modelBuilder.Entity<Quiz>()
+.HasMany(SS => SS.Subject)
+.WithMany(S => S.Quiz)
+.UsingEntity(j => j.ToTable("QuizSubjects"))
+;
         }
 
         public DbSet<Answer> Answer { get; set; }

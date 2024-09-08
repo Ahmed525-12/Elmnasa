@@ -18,7 +18,12 @@ namespace ElmnasaApp.ServicesExtension
         {
             Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             Services.AddAutoMapper(typeof(MappingProfiles));
-
+            Services.AddControllers()
+       .AddJsonOptions(options =>
+       {
+           options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+           options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+       });
             Services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (actionContext) =>

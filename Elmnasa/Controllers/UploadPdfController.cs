@@ -130,7 +130,7 @@ namespace Elmnasa.Controllers
 
                 _unitOfWork.Repository<UploadPdf>().DeleteAsync(UploadPdf);
                 await _unitOfWork.CompleteAsync();
-                return NoContent();
+                return Ok(Result<UploadPdfReadDto>.Success("UploadPdf delete successfully"));
             }
             catch (Exception ex)
             {
