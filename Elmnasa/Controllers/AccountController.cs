@@ -427,8 +427,8 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [HttpPost("SendEmailStudent")]
-        public async Task<IActionResult> SendEmailStudent([FromBody] ForgetPasswordDto emailinput)
+        [HttpPost("SendEmailAccount")]
+        public async Task<IActionResult> SendEmailAccount([FromBody] ForgetPasswordDto emailinput)
         {
             try
             {
@@ -449,7 +449,7 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 2: Find the student by email
-                var user = await _studentManager.FindByEmailAsync(emailinput.Email);
+                var user = await _accountManager.FindByEmailAsync(emailinput.Email);
                 if (user == null)
                 {
                     // If the user is not found, return a failure response
@@ -488,8 +488,8 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [HttpPost("ResetPasswordStudent")]
-        public async Task<IActionResult> ResetPasswordStudent([FromBody] ResetPasswordDto model)
+        [HttpPost("ResetPasswordAccount")]
+        public async Task<IActionResult> ResetPasswordAccount([FromBody] ResetPasswordDto model)
         {
             try
             {
@@ -505,14 +505,14 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 2: Find the user by email
-                var user = await _studentManager.FindByEmailAsync(model.email);
+                var user = await _accountManager.FindByEmailAsync(model.email);
                 if (user == null)
                 {
                     return BadRequest("User not found.");
                 }
 
                 // Step 3: Reset the user's password
-                var result = await _studentManager.ResetPasswordAsync(user, model.token, model.Password);
+                var result = await _accountManager.ResetPasswordAsync(user, model.token, model.Password);
 
                 if (result.Succeeded)
                 {
@@ -534,121 +534,8 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [HttpPost("SendEmailTeacher")]
-        public async Task<IActionResult> SendEmailTeacher([FromBody] ForgetPasswordDto emailinput)
-        {
-            try
-            {
-                // Step 1: Validate the input model state
-                if (!ModelState.IsValid)
-                {
-                    // Extract error messages from ModelState
-                    var errors = ModelState.Values.SelectMany(v => v.Errors)
-                                                   .Select(e => e.ErrorMessage)
-                                                   .ToList();
-                    var errorMessage = string.Join("; ", errors);
-                    return BadRequest(Result.Fail(errorMessage));
-                }
-
-                // Step 2: Validate the input email
-                if (string.IsNullOrEmpty(emailinput.Email))
-                {
-                    return BadRequest("Email input cannot be null or empty.");
-                }
-
-                // Step 3: Find the teacher by email
-                var user = await _TeacherManager.FindByEmailAsync(emailinput.Email);
-                if (user == null)
-                {
-                    return Ok(Result.Fail("Email does not exist."));
-                }
-
-                // Step 4: Generate a password reset token
-                var token = await _tokenService.CreateToken(user);
-                var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/Account/ResetPassword?email={user.Email}&Token={token}";
-
-                // Step 5: Create the email object
-                var email = new EmailDTO
-                {
-                    Subject = "Reset Password",
-                    To = emailinput.Email,
-                    Body = $"Please reset your password by clicking the following link: {resetPasswordLink}",
-                };
-
-                // Step 6: Send the email
-                _emailSettings.SendEmail(email);
-
-                // Step 7: Create a response object with the token and email
-                var emailSuccess = new RecieveEmail
-                {
-                    token = token,
-                    email = emailinput.Email,
-                };
-
-                // Step 8: Return a success response
-                return Ok(Result<RecieveEmail>.Success(emailSuccess, "Success"));
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions and return a failure response
-                return StatusCode(500, Result.Fail($"An error occurred: {ex.Message}"));
-            }
-        }
-
-        [HttpPost("ResetPasswordTeacher")]
-        public async Task<IActionResult> ResetPasswordTeacher([FromBody] ResetPasswordDto model)
-        {
-            try
-            {
-                // Step 1: Validate the input model state
-                if (!ModelState.IsValid)
-                {
-                    // Extract error messages from ModelState
-                    var errors = ModelState.Values.SelectMany(v => v.Errors)
-                                                   .Select(e => e.ErrorMessage)
-                                                   .ToList();
-                    var errorMessage = string.Join("; ", errors);
-                    return BadRequest(Result.Fail(errorMessage));
-                }
-
-                // Step 2: Validate the input fields
-                if (string.IsNullOrEmpty(model.email) || string.IsNullOrEmpty(model.token) || string.IsNullOrEmpty(model.Password))
-                {
-                    return BadRequest("Invalid input. All fields are required.");
-                }
-
-                // Step 3: Find the teacher by email
-                var user = await _TeacherManager.FindByEmailAsync(model.email);
-                if (user == null)
-                {
-                    return BadRequest("User not found.");
-                }
-
-                // Step 4: Reset the teacher's password
-                var result = await _TeacherManager.ResetPasswordAsync(user, model.token, model.Password);
-
-                if (result.Succeeded)
-                {
-                    // Step 5: Return a success response
-                    return Ok(Result.Success("Password reset successful."));
-                }
-                else
-                {
-                    // Step 6: If the password reset fails, return the error details
-                    var errors = result.Errors.Select(e => e.Description).ToList();
-                    var errorMessage = string.Join("; ", errors);
-                    return BadRequest(Result.Fail($"Failed to reset password: {errorMessage}"));
-                }
-            }
-            catch (Exception ex)
-            {
-                // Step 7: Handle any exceptions and return a failure response
-                return StatusCode(500, Result.Fail($"An error occurred: {ex.Message}"));
-            }
-        }
-
-        [HttpPost("ChangePasswordStudent")]
-        public async Task<IActionResult> ChangePasswordStudent([FromBody] ChangePasswordTeacherDTO model)
+        [HttpPost("ChangePasswordAccount")]
+        public async Task<IActionResult> ChangePasswordAccount([FromBody] ChangePasswordTeacherDTO model)
         {
             try
             {
@@ -670,66 +557,14 @@ namespace Elmnasa.Controllers
                 }
 
                 // Step 3: Find the student by email
-                var user = await _studentManager.FindByEmailAsync(model.Email);
+                var user = await _accountManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
                     return BadRequest("User not found.");
                 }
 
                 // Step 4: Change the student's password
-                var result = await _studentManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
-
-                if (result.Succeeded)
-                {
-                    // Step 5: Return a success response
-                    return Ok(Result.Success("Password changed successfully."));
-                }
-                else
-                {
-                    // Step 6: If the password change fails, return the error details
-                    var errors = result.Errors.Select(e => e.Description).ToList();
-                    var errorMessage = string.Join("; ", errors);
-                    return BadRequest(Result.Fail($"Failed to change password: {errorMessage}"));
-                }
-            }
-            catch (Exception ex)
-            {
-                // Step 7: Handle any exceptions and return a failure response
-                return StatusCode(500, Result.Fail($"An error occurred: {ex.Message}"));
-            }
-        }
-
-        [HttpPost("ChangePasswordTeacher")]
-        public async Task<IActionResult> ChangePasswordTeacher([FromBody] ChangePasswordTeacherDTO model)
-        {
-            try
-            {
-                // Step 1: Validate the input model state
-                if (!ModelState.IsValid)
-                {
-                    // Extract error messages from ModelState
-                    var errors = ModelState.Values.SelectMany(v => v.Errors)
-                                                   .Select(e => e.ErrorMessage)
-                                                   .ToList();
-                    var errorMessage = string.Join("; ", errors);
-                    return BadRequest(Result.Fail(errorMessage));
-                }
-
-                // Step 2: Validate the input fields
-                if (string.IsNullOrEmpty(model.Email) || string.IsNullOrEmpty(model.CurrentPassword) || string.IsNullOrEmpty(model.NewPassword))
-                {
-                    return BadRequest("Invalid input. All fields are required.");
-                }
-
-                // Step 3: Find the teacher by email
-                var user = await _TeacherManager.FindByEmailAsync(model.Email);
-                if (user == null)
-                {
-                    return BadRequest("User not found.");
-                }
-
-                // Step 4: Change the teacher's password
-                var result = await _TeacherManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                var result = await _accountManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
 
                 if (result.Succeeded)
                 {

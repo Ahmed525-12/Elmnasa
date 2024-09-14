@@ -30,7 +30,7 @@ namespace Elmnasa.Controllers
             _userManager = userManager;
         }
 
-        [Authorize(Roles = "Student,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("CreateGrade")]
         public async Task<ActionResult<GradeDto>> CreateGrade([FromBody] GradeDto model)
         {
@@ -109,7 +109,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Student")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<GradeDto>> GetGradeById([FromQuery] int id)
         {
@@ -170,7 +170,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Student,Teacher")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GradeDto>>> GetAllGrades()
         {
@@ -194,7 +194,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Teacher")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllUserGrades")]
         public async Task<ActionResult<IEnumerable<GradeDto>>> GetAllUserGrades()
         {

@@ -31,7 +31,7 @@ namespace Elmnasa.Controllers
             _userManager = userManager;
         }
 
-        [Authorize(Roles = "Teacher,Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("CreateSubject")]
         public async Task<ActionResult<SubjectDTO>> CreateSubject([FromBody] SubjectDTO model)
         {
@@ -73,7 +73,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Teacher")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("UpdateSubject")]
         public async Task<ActionResult<SubjectDTO>> UpdateSubject([FromBody] UpdateSubjectDto model)
         {
@@ -110,7 +110,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Teacher")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<SubjectDTO>> GetSubjectById([FromQuery] int id)
         {
@@ -139,7 +139,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Teacher")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSubject([FromQuery] int id)
         {
@@ -171,7 +171,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Student")]
+        [Authorize(Roles = "Admin,Student,Teacher")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SubjectDTO>>> GetAllSubjects()
         {
@@ -190,7 +190,7 @@ namespace Elmnasa.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin,Teacher")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllUserSubjects")]
         public async Task<ActionResult<IEnumerable<SubjectDTO>>> GetAllUserSubjects()
         {
