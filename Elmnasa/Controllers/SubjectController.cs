@@ -74,7 +74,7 @@ namespace Elmnasa.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("UpdateSubject")]
+        [HttpPut("UpdateSubject")]
         public async Task<ActionResult<SubjectDTO>> UpdateSubject([FromBody] UpdateSubjectDto model)
         {
             try

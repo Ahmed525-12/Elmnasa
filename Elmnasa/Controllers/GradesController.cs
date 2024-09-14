@@ -73,7 +73,7 @@ namespace Elmnasa.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost("UpdateGrade")]
+        [HttpPut("UpdateGrade")]
         public async Task<ActionResult<GradeDto>> UpdateGrade([FromBody] UpdateGradeDTO model)
         {
             try
