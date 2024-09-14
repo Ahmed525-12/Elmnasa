@@ -5,6 +5,7 @@ using ElmnasaDomain.DTOs.QuestionDTO;
 using ElmnasaDomain.DTOs.QuizDTOs;
 using ElmnasaDomain.DTOs.SubjectDTOS;
 using ElmnasaDomain.DTOs.SubscribeSubjectDTO;
+using ElmnasaDomain.DTOs.TeacherSubjectDTOS;
 using ElmnasaDomain.DTOs.UploadPdfDTOs;
 using ElmnasaDomain.DTOs.UploadVideosDTOS;
 using ElmnasaDomain.Entites.app;
@@ -25,29 +26,29 @@ namespace ElmnasaApp.Mappes
             CreateMap<Subject, SubjectDTO>().ReverseMap();
             CreateMap<Subject, UpdateSubjectDto>().ReverseMap();
             CreateMap<SubscribeSubject, SubscribeSubjectReadDto>()
-         .ForMember(dest => dest.Subjects, opt => opt.MapFrom(src => src.Subject));
+         .ForMember(dest => dest.Subjects, opt => opt.MapFrom(src => src.TeacherSubject));
             CreateMap<SubscribeSubjectCreateDto, SubscribeSubject>()
-            .ForMember(dest => dest.Subject, opt => opt.Ignore());
+            .ForMember(dest => dest.TeacherSubject, opt => opt.Ignore());
 
             CreateMap<UploadPdf, UploadPdfReadDto>()
-          .ForMember(dest => dest.SubjectIds, opt => opt.MapFrom(src => src.Subject.Select(s => s.Id)));
+          .ForMember(dest => dest.SubjectIds, opt => opt.MapFrom(src => src.TeacherSubject.Select(s => s.Id)));
 
             CreateMap<UploadPdfCreateDto, UploadPdf>()
-            .ForMember(dest => dest.Subject, opt => opt.Ignore());
+            .ForMember(dest => dest.TeacherSubject, opt => opt.Ignore());
 
             CreateMap<UploadVideo, UploadVideoCreateDto>()
-     .ForMember(dest => dest.SubjectIds, opt => opt.MapFrom(src => src.Subject.Select(s => s.Id)));
+     .ForMember(dest => dest.SubjectIds, opt => opt.MapFrom(src => src.TeacherSubject.Select(s => s.Id)));
 
             CreateMap<UploadVideoCreateDto, UploadVideo>()
-                .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.SubjectIds.Select(id => new Subject { Id = id })));
+                .ForMember(dest => dest.TeacherSubject, opt => opt.MapFrom(src => src.SubjectIds.Select(id => new Subject { Id = id })));
 
             // Mapping from UploadVideo to UploadVideoReadDto
             CreateMap<UploadVideo, UploadVideoReadDto>()
-                .ForMember(dest => dest.SubjectIds, opt => opt.MapFrom(src => src.Subject.Select(s => s.Id)));
+                .ForMember(dest => dest.SubjectIds, opt => opt.MapFrom(src => src.TeacherSubject.Select(s => s.Id)));
 
             // Mapping from UploadVideoReadDto to UploadVideo (optional if needed in reverse)
             CreateMap<UploadVideoReadDto, UploadVideo>()
-                .ForMember(dest => dest.Subject, opt => opt.Ignore()); // You can ignore or map as needed
+                .ForMember(dest => dest.TeacherSubject, opt => opt.Ignore()); // You can ignore or map as needed
 
             //___________________________________________________
 
@@ -70,19 +71,26 @@ namespace ElmnasaApp.Mappes
             // Map Quiz to QuizReadDto
             CreateMap<Quiz, QuizReadDto>()
                 .ForMember(dest => dest.Question, opt => opt.MapFrom(src => src.Question))
-                .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.Subject));
+                .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.TeacherSubject));
 
             // Map QuizCreateDTO to Quiz
             CreateMap<QuizCreateDTO, Quiz>()
                 .ForMember(dest => dest.Question, opt => opt.MapFrom(src => src.QuestionIds.Select(id => new Question { Id = id })))
-                .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.SubjectIds.Select(id => new Subject { Id = id })));
+                .ForMember(dest => dest.TeacherSubject, opt => opt.MapFrom(src => src.SubjectIds.Select(id => new Subject { Id = id })));
 
             // Map QuizReadDto to Quiz (usually needed when updating)
             CreateMap<QuizReadDto, Quiz>()
                 .ForMember(dest => dest.Question, opt => opt.Ignore()) // Optionally handle separately if needed
-                .ForMember(dest => dest.Subject, opt => opt.Ignore()); // Optionally handle separately if needed
+                .ForMember(dest => dest.TeacherSubject, opt => opt.Ignore()); // Optionally handle separately if needed
 
             CreateMap<Answer, AnswerDTO>();
+
+            CreateMap<TeacherSubject, TeacherSubjectReadDto>()
+           .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.Subject));
+
+            CreateMap<TeacherSubjectCreateDto, TeacherSubject>()
+           .ForMember(dest => dest.Subject, opt => opt.Ignore()) // Ignore if not needed during creation
+           .ForMember(dest => dest.Teacher_id, opt => opt.Ignore()); // Ignore if not provided during creation
         }
     }
 }

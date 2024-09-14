@@ -22,31 +22,31 @@ namespace ElmnasaInfrastructure.AppContext
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Subject>()
+            modelBuilder.Entity<TeacherSubject>()
                 .HasMany(SS => SS.SubscribeSubject)
-                .WithMany(S => S.Subject)
-                .UsingEntity(j => j.ToTable("StudentSubscribeSubject"))
+                .WithMany(S => S.TeacherSubject)
+                .UsingEntity(j => j.ToTable("StudentSubscribeTeacherSubject"))
 
            ;
 
-            modelBuilder.Entity<Subject>()
+            modelBuilder.Entity<TeacherSubject>()
              .HasMany(SS => SS.UploadPdf)
-             .WithMany(S => S.Subject)
-             .UsingEntity(j => j.ToTable("subjectuploadpdf"))
+             .WithMany(S => S.TeacherSubject)
+             .UsingEntity(j => j.ToTable("TeacherSubjectuploadpdf"))
 
         ;
 
-            modelBuilder.Entity<Subject>()
+            modelBuilder.Entity<TeacherSubject>()
              .HasMany(SS => SS.UploadVideo)
-             .WithMany(S => S.Subject)
-             .UsingEntity(j => j.ToTable("subjectuploadVideo"))
+             .WithMany(S => S.TeacherSubject)
+             .UsingEntity(j => j.ToTable("TeacherSubjectuploadVideo"))
 
         ;
 
-            modelBuilder.Entity<Subject>()
+            modelBuilder.Entity<TeacherSubject>()
               .HasMany(SS => SS.Quiz)
-              .WithMany(S => S.Subject)
-              .UsingEntity(j => j.ToTable("subjectQuiz"))
+              .WithMany(S => S.TeacherSubject)
+              .UsingEntity(j => j.ToTable("TeacherSubjectQuiz"))
 
          ;
 
@@ -61,10 +61,14 @@ namespace ElmnasaInfrastructure.AppContext
      .UsingEntity(j => j.ToTable("QuizQuetions"))
 ;
             modelBuilder.Entity<Quiz>()
-.HasMany(SS => SS.Subject)
+.HasMany(SS => SS.TeacherSubject)
 .WithMany(S => S.Quiz)
-.UsingEntity(j => j.ToTable("QuizSubjects"))
+.UsingEntity(j => j.ToTable("QuizTeacherSubject"))
 ;
+            modelBuilder.Entity<TeacherSubject>()
+       .HasOne(ts => ts.Subject)
+       .WithOne(s => s.TeacherSubject)  // Optional if you want a bidirectional relationship
+       .HasForeignKey<TeacherSubject>(ts => ts.SubjectId);
         }
 
         public DbSet<Answer> Answer { get; set; }
@@ -73,6 +77,7 @@ namespace ElmnasaInfrastructure.AppContext
         public DbSet<Quiz> Quiz { get; set; }
         public DbSet<Subject> Subject { get; set; }
         public DbSet<SubscribeSubject> SubscribeSubject { get; set; }
+        public DbSet<TeacherSubject> TeacherSubject { get; set; }
         public DbSet<UploadPdf> UploadPdf { get; set; }
         public DbSet<UploadVideo> UploadVideo { get; set; }
     }

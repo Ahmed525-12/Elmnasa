@@ -93,9 +93,9 @@ namespace Elmnasa.Controllers
                 subscribeSubject.Student_id = user.Id;
                 // Fetch the Subject entities based on the IDs provided in the DTO
 
-                subscribeSubject.Subject = (ICollection<Subject>)await _unitOfWork.Repository<Subject>().GetAllWithSpecAsync(new SubjectByIdsSpecification(subscribeSubjectDto.SubjectIds));
+                subscribeSubject.TeacherSubject = (ICollection<TeacherSubject>)await _unitOfWork.Repository<TeacherSubject>().GetAllWithSpecAsync(new SubjectByIdsSpecification(subscribeSubjectDto.SubjectIds));
 
-                if (subscribeSubject.Subject == null)
+                if (subscribeSubject.TeacherSubject == null)
                 {
                     // Return a NotFound response if the Subject is not found
                     return NotFound(new ApiResponse(404, "Subject not found."));

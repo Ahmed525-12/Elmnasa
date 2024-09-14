@@ -10,12 +10,12 @@ namespace ElmnasaDomain.Entites.app
     {
         public UploadPdf()
         {
-            Subject = new HashSet<Subject>();
+            TeacherSubject = new HashSet<TeacherSubject>();
         }
 
         public string Teacher_id { get; set; }
         public string Pdf_Url { get; set; }
         public string PdfName { get; set; }
-        public ICollection<Subject> Subject { get; set; }
+        public ICollection<TeacherSubject> TeacherSubject { get; set; }
     }
 }

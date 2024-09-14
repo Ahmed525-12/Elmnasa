@@ -14,7 +14,7 @@ namespace ElmnasaApp.Specf.AppSpecf.UploadVideoSpecf
           : base(uv => uv.Teacher_id == teacherId) // Assuming `Teacher_id` exists in `UploadVideo`
         {
             // Optionally, include related entities like Subjects or Teacher if needed
-            Includes.Add(uv => uv.Subject); // Assuming `UploadVideo` has a related `Subject` entity
+            Includes.Add(uv => uv.TeacherSubject); // Assuming `UploadVideo` has a related `Subject` entity
         }
     }
 }

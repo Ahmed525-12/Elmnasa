@@ -14,7 +14,7 @@ namespace ElmnasaApp.Specf.AppSpecf.UploadPdfSpecf
             : base(ss => ss.Teacher_id == Student_id)
         {
             // Optionally, include related entities like Subjects or Teacher if needed
-            Includes.Add(ss => ss.Subject);
+            Includes.Add(ss => ss.TeacherSubject);
         }
     }
 }

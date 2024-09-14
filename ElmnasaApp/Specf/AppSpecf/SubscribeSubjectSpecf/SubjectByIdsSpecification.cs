@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ElmnasaApp.Specf.AppSpecf.SubscribeSubjectSpecf
 {
-    public class SubjectByIdsSpecification : BaseSpecifications<Subject>
+    public class SubjectByIdsSpecification : BaseSpecifications<TeacherSubject>
     {
         public SubjectByIdsSpecification(List<int> subjectIds)
             : base(s => subjectIds.Contains(s.Id))

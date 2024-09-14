@@ -4,16 +4,18 @@ using ElmnasaInfrastructure.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ElmnasaInfrastructure.AppContext.Migrations
+namespace ElmnasaInfrastructure.AppContext.Migraations
 {
     [DbContext(typeof(ElmnasaContext))]
-    partial class ElmnasaContextModelSnapshot : ModelSnapshot
+    [Migration("20240914074004_addTeacherSubjecttotablesandrenamemanyhtomanytablesaddquizsubjetcsaddteacherid")]
+    partial class addTeacherSubjecttotablesandrenamemanyhtomanytablesaddquizsubjetcsaddteacherid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

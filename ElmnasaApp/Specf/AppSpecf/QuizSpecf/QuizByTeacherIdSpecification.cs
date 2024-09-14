@@ -15,7 +15,7 @@ namespace ElmnasaApp.Specf.AppSpecf.QuizSpecf
         {
             // Optionally, include related entities like Answers or Teacher if needed
             Includes.Add(ss => ss.Question);
-            Includes.Add(ss => ss.Subject);
+            Includes.Add(ss => ss.TeacherSubject);
         }
     }
 }

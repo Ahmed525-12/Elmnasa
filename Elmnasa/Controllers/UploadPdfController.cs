@@ -93,9 +93,9 @@ namespace Elmnasa.Controllers
                 UploadPdf.Teacher_id = user.Id;
                 // Fetch the Subject entities based on the IDs provided in the DTO
 
-                UploadPdf.Subject = (ICollection<Subject>)await _unitOfWork.Repository<Subject>().GetAllWithSpecAsync(new SubjectByIdsSpecification(UploadPdfDto.SubjectIds));
+                UploadPdf.TeacherSubject = (ICollection<TeacherSubject>)await _unitOfWork.Repository<TeacherSubject>().GetAllWithSpecAsync(new SubjectByIdsSpecification(UploadPdfDto.SubjectIds));
 
-                if (UploadPdf.Subject == null)
+                if (UploadPdf.TeacherSubject == null)
                 {
                     // Return a NotFound response if the Subject is not found
                     return NotFound(new ApiResponse(404, "Subject not found."));

@@ -13,11 +13,7 @@ namespace ElmnasaDomain.Entites.app
         public string Subject_Name { get; set; }
         public string Account_id { get; set; }
 
-        public ICollection<SubscribeSubject> SubscribeSubject { get; set; }
-        public ICollection<UploadPdf> UploadPdf { get; set; }
-
-        public ICollection<UploadVideo> UploadVideo { get; set; }
-
-        public ICollection<Quiz> Quiz { get; set; }
+        // Optional navigation property
+        public TeacherSubject TeacherSubject { get; set; }
     }
 }

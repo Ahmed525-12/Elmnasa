@@ -93,9 +93,9 @@ namespace Elmnasa.Controllers
                 UploadVideo.Teacher_id = user.Id;
                 // Fetch the Subject entities based on the IDs provided in the DTO
 
-                UploadVideo.Subject = (ICollection<Subject>)await _unitOfWork.Repository<Subject>().GetAllWithSpecAsync(new SubjectByIdsSpecification(UploadVideoDto.SubjectIds));
+                UploadVideo.TeacherSubject = (ICollection<TeacherSubject>)await _unitOfWork.Repository<TeacherSubject>().GetAllWithSpecAsync(new SubjectByIdsSpecification(UploadVideoDto.SubjectIds));
 
-                if (UploadVideo.Subject == null)
+                if (UploadVideo.TeacherSubject == null)
                 {
                     // Return a NotFound response if the Subject is not found
                     return NotFound(new ApiResponse(404, "Subject not found."));

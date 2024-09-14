@@ -99,7 +99,7 @@ namespace Elmnasa.Controllers
                 var subjectIds = quizDto.SubjectIds.ToList();
 
                 // Fetch subjects by IDs
-                var subjects = await _unitOfWork.Repository<Subject>().GetAllWithSpecAsync(new SubjectByIdsSpecification(subjectIds));
+                var subjects = await _unitOfWork.Repository<TeacherSubject>().GetAllWithSpecAsync(new SubjectByIdsSpecification(subjectIds));
 
                 // Check if subjects are found
                 if (subjects == null || !subjects.Any())
@@ -108,7 +108,7 @@ namespace Elmnasa.Controllers
                 }
 
                 // Convert IReadOnlyList<Subject> to ICollection<Subject>
-                quiz.Subject = new List<Subject>(subjects);
+                quiz.TeacherSubject = new List<TeacherSubject>(subjects);
 
                 // Ensure QuestionIds is a List<int>
                 var questionIds = quizDto.QuestionIds.ToList();

@@ -10,10 +10,10 @@ namespace ElmnasaDomain.Entites.app
     {
         public SubscribeSubject()
         {
-            Subject = new HashSet<Subject>();
+            TeacherSubject = new HashSet<TeacherSubject>();
         }
 
         public string Student_id { get; set; }
-        public ICollection<Subject> Subject { get; set; }
+        public ICollection<TeacherSubject> TeacherSubject { get; set; }
     }
 }

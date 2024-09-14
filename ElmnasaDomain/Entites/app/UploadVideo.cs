@@ -10,13 +10,13 @@ namespace ElmnasaDomain.Entites.app
     {
         public UploadVideo()
         {
-            Subject = new HashSet<Subject>();
+            TeacherSubject = new HashSet<TeacherSubject>();
         }
 
         public string Teacher_id { get; set; }
         public string Video_Url { get; set; }
         public string Video_Name { get; set; }
         public string Description { get; set; }
-        public ICollection<Subject> Subject { get; set; }
+        public ICollection<TeacherSubject> TeacherSubject { get; set; }
     }
 }
