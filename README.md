@@ -14,7 +14,7 @@ This repository contains the backend system for [Project Name], developed using 
 ## Development Stack
 
 - **Backend**: ASP.NET Web API
-- **Database**: [Mention the database here, e.g., SQL Server, PostgreSQL]
+- **Database**: SQL Server
 - **Deployment**: Monster ASP
 - **Version Control**: GitHub
 
